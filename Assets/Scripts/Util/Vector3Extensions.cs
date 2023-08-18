@@ -24,9 +24,13 @@ public static class Vector3Extensions
     /// <param name="source"></param>
     /// <param name="destination"></param>
     /// <returns></returns>
-    public static Vector3 DirectionTo(this Vector3 source, Vector3 destination)
+    public static Vector3 DirectionToNormalized(this Vector3 source, Vector3 destination)
     {
         return Vector3.Normalize(destination - source);
+    }
+    public static Vector3 DirectionTo(this Vector3 source, Vector3 destination)
+    {
+        return (destination - source);
     }
 
 }
