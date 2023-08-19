@@ -9,10 +9,15 @@ public class SimpleTargeting : MonoBehaviour, ArcherInterface
     [SerializeField]
     float power = 15f;
 
-    public void Launch(TargetData NewTarget)
+    public LaunchData Calculate(TargetData targetData)
     {
-        RotateArcher(NewTarget.targetPosition);
-        LaunchArrow(NewTarget.targetPosition);
+        throw new System.NotImplementedException();
+    }
+
+    public void Launch(LaunchData data)
+    {
+        //RotateArcher(NewTarget.targetPosition);
+        //LaunchArrow(NewTarget.targetPosition);
     }
 
     void RotateArcher(Vector3 target)
@@ -28,5 +33,8 @@ public class SimpleTargeting : MonoBehaviour, ArcherInterface
         Vector3 dir = target - startPosition.position;
         newArrow.GetComponent<Rigidbody>().velocity = dir.normalized * power;
     }
+
+
+
 }
 

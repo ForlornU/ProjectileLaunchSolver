@@ -1,6 +1,6 @@
-using UnityEngine;
-
 public interface ArcherInterface
 {
-    void Launch(TargetData targetData);
+    LaunchData Calculate(TargetData targetData);
+    void Launch(LaunchData data);
+
 }

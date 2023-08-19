@@ -2,11 +2,17 @@ using UnityEngine;
 
 public class PointTargeting : MonoBehaviour
 {
-    [SerializeField]
-    GameObject Archer;
+    ArcherInterface Archer;
 
     [SerializeField]
     Transform target;
+
+    LaunchData storedLaunchData;
+
+    private void Start()
+    {
+        Archer = GetComponent<ArcherInterface>();
+    }
 
     void Update()
     {
@@ -18,12 +24,20 @@ public class PointTargeting : MonoBehaviour
 
     void Predict()
     {
-        Archer.GetComponent<ArcherInterface>().Launch(UpdateTarget());
+        LaunchData newData = Archer.Calculate(UpdateTarget());
+        if (newData.horizontalDistance < 5f)
+        {
+            Debug.Log("Too close!");
+            return;
+        }
+        storedLaunchData = newData;
     }
 
     void ShootArrow()
     {
-        
+        if (storedLaunchData.timeToTarget < 0.1f) //Trying to check if null
+            return;
+        Archer.Launch(storedLaunchData);
     }
 
     TargetData UpdateTarget()

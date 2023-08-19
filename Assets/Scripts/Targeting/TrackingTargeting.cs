@@ -11,13 +11,17 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
     [SerializeField]
     float power = 15f;
 
-    public void Launch(TargetData NewTarget)
+    public LaunchData Calculate(TargetData data)
     {
-        if (!NewTarget.targetObject.GetComponent<Rigidbody>())
-            return;
+        throw new System.NotImplementedException();
+    }
+    public void Launch(LaunchData data)
+    {
+        //if (!NewTarget.targetObject.GetComponent<Rigidbody>())
+        //    return;
 
-        RotateArcher(NewTarget.targetPosition);
-        LaunchArrow(NewTarget.targetObject);
+        //RotateArcher(NewTarget.targetPosition);
+        //LaunchArrow(NewTarget.targetObject);
     }
 
     void RotateArcher(Vector3 target)

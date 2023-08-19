@@ -19,13 +19,23 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         lineRenderer = GetComponent<LineRenderer>();
     }
 
-    public void Launch(TargetData newTarget)
+    public LaunchData Calculate(TargetData data)
     {
-        RotateArcher(newTarget.targetPosition);
-        LaunchData launchData = CalculateLaunch(newTarget.targetPosition);
+        RotateArcher(data.targetPosition);
+        LaunchData launchData = CalculateLaunch(data.targetPosition);
         DrawPath(launchData);
-        LaunchArrow(launchData.initialVelocity);
         PrintData(launchData);
+        return launchData;
+    }
+    public void Launch(LaunchData data)
+    {
+        LaunchArrow(data.initialVelocity);
+    }
+
+    void RotateArcher(Vector3 target)
+    {
+        Vector3 dir = transform.position.DirectionTo(target.With(y:transform.position.y));
+        transform.rotation = Quaternion.LookRotation(dir);
     }
 
     void LaunchArrow(Vector3 vel)
@@ -56,16 +66,11 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         Vector3 velocityFinal = velocityY + velocityXZ;
         velocityFinal *= -Mathf.Sign(data.gravity);
 
+        data.horizontalDistance = horizontalDirection.magnitude;
         data.initialVelocity = velocityFinal;
         data.timeToTarget = time;
         data.targetPosition = targetPosition;
         return data;
-    }
-
-    void RotateArcher(Vector3 target)
-    {
-        Vector3 dir = transform.position.DirectionTo(target).With(y:transform.position.y);
-        transform.rotation = Quaternion.LookRotation(dir);
     }
 
     void DrawPath(LaunchData launchData)
@@ -94,11 +99,5 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         dataToText.text = $"Force: {data.initialVelocity.magnitude} \n Vertical Displacement: {Mathf.Abs(startPosition.position.y - data.targetPosition.y)} \n Time To Target: {data.timeToTarget}";
     }
 
-    struct LaunchData
-    {
-        public Vector3 targetPosition;
-        public Vector3 initialVelocity;
-        public float timeToTarget;
-        public float gravity;
-    }
+
 }
