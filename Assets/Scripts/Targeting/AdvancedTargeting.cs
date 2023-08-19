@@ -96,7 +96,10 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
 
     void PrintData(LaunchData data)
     {
-        dataToText.text = $"Force: {data.initialVelocity.magnitude} \n Vertical Displacement: {Mathf.Abs(startPosition.position.y - data.targetPosition.y)} \n Time To Target: {data.timeToTarget}";
+        dataToText.text = $"Force: {data.initialVelocity.magnitude.ToString("F2")} " +
+            $"\nVertical Displacement: {Mathf.Abs(startPosition.position.y - data.targetPosition.y).ToString("F2")} " +
+            $"\nHorizontal Displacement: {data.horizontalDistance.ToString("F2")} " +
+            $"\nTime To Target: {data.timeToTarget.ToString("F2")}";
     }
 
 
