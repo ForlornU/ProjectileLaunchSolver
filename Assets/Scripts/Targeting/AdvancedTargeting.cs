@@ -1,8 +1,7 @@
-
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class AdvancedTargeting : TargetingBase, ArcherInterface
+public class AdvancedTargeting : MonoBehaviour, ArcherInterface
 {
     [SerializeField]
     Transform startPosition;
@@ -61,6 +60,12 @@ public class AdvancedTargeting : TargetingBase, ArcherInterface
         data.timeToTarget = time;
         data.targetPosition = targetPosition;
         return data;
+    }
+
+    void RotateArcher(Vector3 target)
+    {
+        Vector3 dir = transform.position.DirectionTo(target).With(y:transform.position.y);
+        transform.rotation = Quaternion.LookRotation(dir);
     }
 
     void DrawPath(LaunchData launchData)

@@ -22,7 +22,7 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
 
     void RotateArcher(Vector3 target)
     {
-        Vector3 dir = target - transform.position;
+        Vector3 dir = transform.position.DirectionTo(target).With(y: transform.position.y);
         transform.rotation = Quaternion.LookRotation(dir);
     }
 

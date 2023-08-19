@@ -11,12 +11,19 @@ public class PointTargeting : MonoBehaviour
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
-            OnClick();
+            Predict();
+        if(Input.GetMouseButtonDown(1))
+            ShootArrow();
     }
 
-    void OnClick()
+    void Predict()
     {
         Archer.GetComponent<ArcherInterface>().Launch(UpdateTarget());
+    }
+
+    void ShootArrow()
+    {
+        
     }
 
     TargetData UpdateTarget()
