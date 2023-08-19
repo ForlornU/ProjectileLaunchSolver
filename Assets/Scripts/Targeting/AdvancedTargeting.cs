@@ -26,6 +26,7 @@ public class AdvancedTargeting : TargetingBase, ArcherInterface
         LaunchData launchData = CalculateLaunch(newTarget.targetPosition);
         DrawPath(launchData);
         LaunchArrow(launchData.initialVelocity);
+        PrintData(launchData);
     }
 
     void LaunchArrow(Vector3 vel)
@@ -42,7 +43,8 @@ public class AdvancedTargeting : TargetingBase, ArcherInterface
         //Vertical distance between target and start position
         float distanceY = targetPosition.y - startPosition.position.y;
 
-        float height = RandomizeHeight(targetPosition.y, distanceY);
+        //Randomize Height, larger values yield higher arc, must never be below 0
+        float height = Mathf.Abs(distanceY + Random.Range(0.5f, maxHeightRange));
 
         //Horizontal distance, points toward the target
         Vector3 horizontalDirection = startPosition.position.DirectionTo(targetPosition).With(y: 0f);
@@ -57,17 +59,8 @@ public class AdvancedTargeting : TargetingBase, ArcherInterface
 
         data.initialVelocity = velocityFinal;
         data.timeToTarget = time;
+        data.targetPosition = targetPosition;
         return data;
-    }
-
-    float RandomizeHeight(float targetHeight, float distance)
-    {
-        //Height must never be < 0
-        float newHeight = Mathf.Abs(distance + Random.Range(0.25f, maxHeightRange));
-
-        dataToText.text = $"Starting height: {startPosition.position.y} \ntarget height: {targetHeight} \nVertical Difference: {Mathf.Abs(distance)} \nNew Height: {newHeight}";
-
-        return newHeight;
     }
 
     void DrawPath(LaunchData launchData)
@@ -91,8 +84,14 @@ public class AdvancedTargeting : TargetingBase, ArcherInterface
         Debug.Log("Highest reached point on arc : " + debugHighestPoint);
     }
 
+    void PrintData(LaunchData data)
+    {
+        dataToText.text = $"Force: {data.initialVelocity.magnitude} \n Vertical Displacement: {Mathf.Abs(startPosition.position.y - data.targetPosition.y)} \n Time To Target: {data.timeToTarget}";
+    }
+
     struct LaunchData
     {
+        public Vector3 targetPosition;
         public Vector3 initialVelocity;
         public float timeToTarget;
         public float gravity;
