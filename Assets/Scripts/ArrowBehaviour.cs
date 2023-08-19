@@ -21,6 +21,7 @@ public class ArrowBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        sensitivity *= 2f;
+        rb.isKinematic = true;
+        //sensitivity *= 2f;
     }
 }

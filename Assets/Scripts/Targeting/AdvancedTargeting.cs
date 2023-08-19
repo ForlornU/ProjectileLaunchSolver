@@ -1,18 +1,19 @@
-using System;
+
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class AdvancedTargeting : MonoBehaviour, ArcherInterface
+public class AdvancedTargeting : TargetingBase, ArcherInterface
 {
     [SerializeField]
     Transform startPosition;
     [SerializeField]
     GameObject arrow;
     LineRenderer lineRenderer;
-    public float h = 25;
 
     [Tooltip("Resolution/Detail-level of the line-renderer component")]
     public int lineResolution = 30;
+    public float maxHeightRange = 5f;
+    public TMPro.TMP_Text dataToText;
 
     private void Start()
     {
@@ -27,12 +28,6 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         LaunchArrow(launchData.initialVelocity);
     }
 
-    void RotateArcher(Vector3 target)
-    {
-        Vector3 dir = target - transform.position;
-        transform.rotation = Quaternion.LookRotation(dir);
-    }
-
     void LaunchArrow(Vector3 vel)
     {
         GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
@@ -45,18 +40,18 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         data.gravity = Physics.gravity.y;
 
         //Vertical distance between target and start position
-        float displacementY = targetPosition.y - startPosition.position.y;
+        float distanceY = targetPosition.y - startPosition.position.y;
 
-        float height = RandomizeHeight(targetPosition.y, displacementY);
+        float height = RandomizeHeight(targetPosition.y, distanceY);
 
         //Horizontal distance, points toward the target
-        Vector3 displacementXZ = startPosition.position.DirectionTo(targetPosition).With(y: 0f);
+        Vector3 horizontalDirection = startPosition.position.DirectionTo(targetPosition).With(y: 0f);
 
         //Time our path will take
-        float time = Mathf.Sqrt(-2 * height / data.gravity) + Mathf.Sqrt(2 * (displacementY - height) / data.gravity);
+        float time = Mathf.Sqrt(-2 * height / data.gravity) + Mathf.Sqrt(2 * (distanceY - height) / data.gravity);
 
         Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * data.gravity * height);
-        Vector3 velocityXZ = displacementXZ * (1 / time);
+        Vector3 velocityXZ = horizontalDirection * (1 / time);
         Vector3 velocityFinal = velocityY + velocityXZ;
         velocityFinal *= -Mathf.Sign(data.gravity);
 
@@ -67,18 +62,10 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
 
     float RandomizeHeight(float targetHeight, float distance)
     {
-        //Height can never be < 0
-        float newHeight = Math.Abs(distance + 0.1f);
+        //Height must never be < 0
+        float newHeight = Mathf.Abs(distance + Random.Range(0.25f, maxHeightRange));
 
-        if (targetHeight < startPosition.position.y)
-            newHeight = 0.1f;
-
-        Debug.Log(
-            "Starting height: " + startPosition.position.y
-            + " target height: " + targetHeight
-            + " height is set to: " + newHeight
-            + " displacement: " + Math.Abs(distance)
-            );
+        dataToText.text = $"Starting height: {startPosition.position.y} \ntarget height: {targetHeight} \nVertical Difference: {Mathf.Abs(distance)} \nNew Height: {newHeight}";
 
         return newHeight;
     }
