@@ -1,27 +1,27 @@
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
 public class AdvancedTargeting : MonoBehaviour, ArcherInterface
 {
     [SerializeField] Transform startPosition;
     [SerializeField] GameObject arrow;
-    [SerializeField] int lineResolution = 30;
     [SerializeField, Range(0.1f, 20f)] float maxHeightRange = 2f;
-    [SerializeField] TMPro.TMP_Text dataToText;
 
-    LineRenderer lineRenderer;
+    UIVisualizer ui;
 
     private void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
+        ui = GetComponent<UIVisualizer>();
     }
 
     public LaunchData Calculate(TargetData data)
     {
         RotateArcher(data.targetPosition);
         LaunchData launchData = CalculateLaunch(data.targetPosition);
-        DrawPath(launchData);
-        PrintData(launchData);
+        launchData.initialPosition = startPosition.position;
+
+        ui.UpdateLine(launchData);
+        ui.WriteToUi(launchData);
+
         return launchData;
     }
     public void Launch(LaunchData data)
@@ -83,32 +83,4 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         Debug.Log(randomizedHeight);
         return randomizedHeight;
     }
-
-    void DrawPath(LaunchData launchData)
-    {
-        lineRenderer.positionCount = lineResolution;
-        Vector3 drawPoint = startPosition.position;
-        float debugHighestPoint = 0f;
-
-        for (int i = 1; i <= lineResolution; i++)
-        {
-            float simulationTime = i / (float)lineResolution * launchData.timeToTarget;
-            Vector3 displacement = launchData.initialVelocity * simulationTime + Vector3.up * launchData.gravity * simulationTime * simulationTime / 2f;
-            drawPoint = startPosition.position + displacement;
-
-            lineRenderer.SetPosition(i-1, drawPoint);
-
-            if(drawPoint.y > debugHighestPoint)
-                debugHighestPoint = drawPoint.y;
-        }
-    }
-
-    void PrintData(LaunchData data)
-    {
-        dataToText.text = $"{data.initialVelocity.magnitude.ToString("F2")}" +
-            $"\n{(data.targetPosition.y - startPosition.position.y).ToString("F2")}" +
-            $"\n{data.horizontalDistance.ToString("F2")}" +
-            $"\n{data.timeToTarget.ToString("F2")}";
-    }
-
 }

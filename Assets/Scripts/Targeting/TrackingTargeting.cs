@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class TrackingTargeting : MonoBehaviour, ArcherInterface
 {
-    [SerializeField]
-    bool pauseDebug = true;
-    [SerializeField]
-    GameObject arrow;
-    [SerializeField]
-    Transform startPosition;
-    [SerializeField]
-    float power = 15f;
+    [SerializeField] bool pauseDebug = true;
+    [SerializeField] GameObject arrow;
+    [SerializeField] Transform startPosition;
+    [SerializeField] float power = 15f;
+
+    UIVisualizer ui;
+
+    private void Start()
+    {
+        ui = GetComponent<UIVisualizer>();
+    }
 
     public LaunchData Calculate(TargetData data)
     {
@@ -41,6 +44,8 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
             velocity = CalculateAnticipatedVelocity(targetRigidbody);
         else
             velocity = startPosition.position.DirectionTo(target.position).normalized;
+
+        ui.StraightLine(startPosition.position, velocity, power);
 
         newArrow.GetComponent<Rigidbody>().velocity = velocity * power;
     }
