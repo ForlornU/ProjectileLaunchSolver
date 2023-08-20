@@ -19,7 +19,7 @@ public class CameraControl : MonoBehaviour
     private void UpdateCamera()
     {
         Vector3 input = InputValues(out int yRotation).normalized;
-        cam.fieldOfView = Mathf.Clamp(cam.fieldOfView + input.y * 2, 30, 110);
+        cam.fieldOfView = Mathf.Clamp(cam.fieldOfView + input.y * 2, 15, 120);
         transform.parent.Translate(input.Flat() * speed * Time.deltaTime);
         transform.parent.Rotate(Vector3.up * yRotation * Time.deltaTime * rotationSpeed);
     }
