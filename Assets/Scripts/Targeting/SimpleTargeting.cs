@@ -11,26 +11,30 @@ public class SimpleTargeting : MonoBehaviour, ArcherInterface
 
     public LaunchData Calculate(TargetData targetData)
     {
-        throw new System.NotImplementedException();
+        RotateArcher(targetData.targetPosition);
+        LaunchArrow(targetData.targetPosition);
+
+        //This data is not used, but required. This class is too simple to have any use for it
+        LaunchData fauxData = new LaunchData();
+        return fauxData;
     }
 
     public void Launch(LaunchData data)
     {
-        //RotateArcher(NewTarget.targetPosition);
-        //LaunchArrow(NewTarget.targetPosition);
+        Debug.Log("Left click to fire a simple arrow");
     }
 
     void RotateArcher(Vector3 target)
     {
-        Vector3 dir = transform.position.DirectionTo(target).With(y: transform.position.y);
+        Vector3 dir = transform.position.DirectionTo(target.With(y: transform.position.y));
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
     void LaunchArrow(Vector3 target)
     {
-        GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
-
         Vector3 dir = target - startPosition.position;
+
+        GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
         newArrow.GetComponent<Rigidbody>().velocity = dir.normalized * power;
     }
 

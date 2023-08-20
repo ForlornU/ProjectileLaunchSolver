@@ -13,30 +13,41 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
 
     public LaunchData Calculate(TargetData data)
     {
-        throw new System.NotImplementedException();
+        RotateArcher(data.targetPosition);
+        LaunchArrow(data.targetObject);
+
+        //This data is not used, but required. This class is too simple to have any use for it
+        LaunchData fauxData = new LaunchData();
+        return fauxData;
     }
     public void Launch(LaunchData data)
     {
-        //if (!NewTarget.targetObject.GetComponent<Rigidbody>())
-        //    return;
-
-        //RotateArcher(NewTarget.targetPosition);
-        //LaunchArrow(NewTarget.targetObject);
+        Debug.Log("Left click to fire a predicting arrow at a moving target");
     }
 
     void RotateArcher(Vector3 target)
     {
-        Vector3 dir = transform.position.DirectionTo(target).With(y: transform.position.y);
+        Vector3 dir = transform.position.DirectionTo(target.With(y: transform.position.y));
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
     void LaunchArrow(Transform target)
     {
         GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
-
         Rigidbody targetRigidbody = target.GetComponent<Rigidbody>();
+        Vector3 velocity;
 
-        (Vector3 expectedPosition, Vector3 dir) = AnticipateVelocity(targetRigidbody);
+        if (targetRigidbody != null)
+            velocity = CalculateAnticipatedVelocity(targetRigidbody);
+        else
+            velocity = startPosition.position.DirectionTo(target.position).normalized;
+
+        newArrow.GetComponent<Rigidbody>().velocity = velocity * power;
+    }
+
+    Vector3 CalculateAnticipatedVelocity(Rigidbody targetRigidbody)
+    {
+        (Vector3 expectedPosition, Vector3 dirToRigidbody) = AnticipateVelocity(targetRigidbody);
 
         if (pauseDebug)
         {
@@ -45,7 +56,7 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
             Debug.Break();
         }
 
-        newArrow.GetComponent<Rigidbody>().velocity = dir.normalized * power;
+        return dirToRigidbody;
     }
 
     float TimeToImpact(Rigidbody target)
@@ -66,7 +77,7 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
         Vector3 dir = expectedPosition - startPosition.position;
 
         Debug.Log("Time until hitting target: " + timeToHit);
-        return (expectedPosition, dir);
+        return (expectedPosition, dir.normalized);
     }
 
 }
