@@ -5,7 +5,7 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
     [SerializeField] Transform startPosition;
     [SerializeField] GameObject arrow;
     [SerializeField, Range(0.1f, 20f)] float maxHeightRange = 2f;
-
+    [SerializeField] bool random = false;
     UIVisualizer ui;
 
     private void Start()
@@ -76,10 +76,13 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
 
     float RandomizeHeight(float relativeHeight)
     {
-        //Randomize Height, larger values yield higher arc, must never be below 0
+        //Larger values yield higher arc, must never be below 0
         float minValue = (relativeHeight > 0) ? relativeHeight + 0.1f : 0.1f;
         float maxValue = (relativeHeight > 0) ? relativeHeight + maxHeightRange : minValue + maxHeightRange;
-        float randomizedHeight = Random.Range(minValue, maxValue);
+
+        float randomizedHeight = random ? Random.Range(minValue, maxValue) : Mathf.Lerp(minValue, maxValue, 0.5f);
+        //randomizedHeight = Mathf.Lerp(minValue, maxValue, 0.5f);
+
         Debug.Log(randomizedHeight);
         return randomizedHeight;
     }

@@ -3,27 +3,39 @@ using UnityEngine;
 public class PointTargeting : MonoBehaviour
 {
     ArcherInterface Archer;
-
-    [SerializeField]
-    Transform target;
-
     LaunchData storedLaunchData;
+
+    [SerializeField] Transform target;
+    float targetingDelay = 0.15f;
+    [SerializeField, Range(0.06f, 2f)] float maxDelay = 0.15f;
 
     private void Start()
     {
         Archer = GetComponent<ArcherInterface>();
+        targetingDelay = maxDelay;
     }
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButton(0) && targetingDelay == 0)
+        {
             Predict();
-        if(Input.GetMouseButtonDown(1))
+        }
+        else if(Input.GetMouseButtonDown(1))
             ShootArrow();
+
+        Cooldown();
+    }
+
+    void Cooldown()
+    {
+        targetingDelay = Mathf.Clamp(targetingDelay -= Time.deltaTime, 0f, maxDelay);
     }
 
     void Predict()
     {
+        targetingDelay = maxDelay;
+
         LaunchData newData = Archer.Calculate(UpdateTarget());
         if (newData.horizontalDistance < 5f)
         {

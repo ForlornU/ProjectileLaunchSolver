@@ -24,18 +24,15 @@ $"\n{data.timeToTarget.ToString("F2")}";
     {
         lineRenderer.positionCount = lineResolution;
         Vector3 drawPoint = launchData.initialPosition;
-        float debugHighestPoint = 0f;
+        lineRenderer.SetPosition(0, drawPoint);
 
-        for (int i = 1; i <= lineResolution; i++)
+        for (int i = 1; i < lineResolution; i++)
         {
             float simulationTime = i / (float)lineResolution * launchData.timeToTarget;
             Vector3 displacement = launchData.initialVelocity * simulationTime + Vector3.up * launchData.gravity * simulationTime * simulationTime / 2f;
             drawPoint = launchData.initialPosition + displacement;
 
-            lineRenderer.SetPosition(i - 1, drawPoint);
-
-            if (drawPoint.y > debugHighestPoint)
-                debugHighestPoint = drawPoint.y;
+            lineRenderer.SetPosition(i, drawPoint);
         }
     }
 
