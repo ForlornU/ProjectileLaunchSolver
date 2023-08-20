@@ -3,16 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class AdvancedTargeting : MonoBehaviour, ArcherInterface
 {
-    [SerializeField]
-    Transform startPosition;
-    [SerializeField]
-    GameObject arrow;
-    LineRenderer lineRenderer;
+    [SerializeField] Transform startPosition;
+    [SerializeField] GameObject arrow;
+    [SerializeField] int lineResolution = 30;
+    [SerializeField] float maxHeightRange = 2f;
+    [SerializeField] TMPro.TMP_Text dataToText;
 
-    [Tooltip("Resolution/Detail-level of the line-renderer component")]
-    public int lineResolution = 30;
-    public float maxHeightRange = 1f;
-    public TMPro.TMP_Text dataToText;
+    LineRenderer lineRenderer;
 
     private void Start()
     {
@@ -47,37 +44,39 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
     LaunchData CalculateLaunch(Vector3 targetPosition)
     {
         LaunchData data = new LaunchData();
+
         data.gravity = Physics.gravity.y;
-
-        //Vertical distance between target and start position
         float distanceY = targetPosition.y - startPosition.position.y;
-
-        //Randomize Height, larger values yield higher arc, must never be below 0
-        float height = RandomizeHeight(distanceY); //(targetPosition.y);
-
-        //Horizontal distance, points toward the target
         Vector3 horizontalDirection = startPosition.position.DirectionTo(targetPosition).With(y: 0f);
 
-        //Time our path will take
-        float time = Mathf.Sqrt(-2 * height / data.gravity) + Mathf.Sqrt(2 * (distanceY - height) / data.gravity);
-
-        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * data.gravity * height);
-        Vector3 velocityXZ = horizontalDirection * (1 / time);
-        Vector3 velocityFinal = velocityY + velocityXZ;
-        velocityFinal *= -Mathf.Sign(data.gravity);
+        float height = RandomizeHeight(distanceY);
+        float time = CalculateTimeToTarget(height, data.gravity, distanceY);
+        Vector3 velocity = CalculateInitialVelocity(height, horizontalDirection, data.gravity, time);
 
         data.horizontalDistance = horizontalDirection.magnitude;
-        data.initialVelocity = velocityFinal;
+        data.initialVelocity = velocity;
         data.timeToTarget = time;
         data.targetPosition = targetPosition;
         return data;
     }
 
+    float CalculateTimeToTarget(float height, float gravity, float distanceY)
+    {
+        return Mathf.Sqrt(-2 * height / gravity) + Mathf.Sqrt(2 * (distanceY - height) / gravity);
+    }
+
+    Vector3 CalculateInitialVelocity(float height, Vector3 horizontalDirection, float gravity, float time)
+    {
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * height);
+        Vector3 velocityXZ = horizontalDirection * (1 / time);
+        Vector3 velocityFinal = velocityY + velocityXZ;
+        velocityFinal *= -Mathf.Sign(gravity);
+        return velocityFinal;
+    }
 
     float RandomizeHeight(float relativeHeight)
     {
-        //Height must never be <0 , but it also has to be relative to the position of the bow and target
-        //while allowing some randomization and customization
+        //Randomize Height, larger values yield higher arc, must never be below 0
         float minValue = (relativeHeight > 0) ? relativeHeight + 0.1f : 0.1f;
         float maxValue = (relativeHeight > 0) ? relativeHeight + maxHeightRange : minValue + maxHeightRange;
         float randomizedHeight = Random.Range(minValue, maxValue);
@@ -113,6 +112,5 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
             $"\nHorizontal Displacement: {data.horizontalDistance.ToString("F2")} " +
             $"\nTime To Target: {data.timeToTarget.ToString("F2")}";
     }
-
 
 }
