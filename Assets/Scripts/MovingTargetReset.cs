@@ -20,7 +20,6 @@ public class MovingTargetReset : MonoBehaviour
     private void Reset()
     {
         Rigidbody rb = GetComponent<Rigidbody>();
-        rb.velocity = Vector3.zero;
         rb.position = startPosition;
     }
 }

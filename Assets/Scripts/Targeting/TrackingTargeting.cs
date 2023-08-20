@@ -4,7 +4,7 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
 {
     [SerializeField] GameObject arrow;
     [SerializeField] Transform startPosition;
-    [SerializeField] float power = 15f;
+    [SerializeField] float power = 30f;
 
     UIVisualizer ui;
 

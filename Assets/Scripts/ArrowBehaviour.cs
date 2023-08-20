@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class ArrowBehaviour : MonoBehaviour
 {
-    [SerializeField]
-    float sensitivity = 3f;
+    float minVelocity = 0.1f;
     Rigidbody rb;
 
     private void Start()
@@ -13,7 +12,7 @@ public class ArrowBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (rb.velocity.magnitude <= sensitivity)
+        if (rb.velocity.magnitude <= minVelocity)
             return;
         
         transform.rotation = Quaternion.LookRotation(GetComponent<Rigidbody>().velocity, Vector3.up);
@@ -21,7 +20,8 @@ public class ArrowBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        rb.isKinematic = true;
-        //sensitivity *= 2f;
+        transform.parent = collision.transform;
+        Destroy(rb);
+        Destroy(this);
     }
 }
