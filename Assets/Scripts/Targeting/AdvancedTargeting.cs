@@ -6,7 +6,7 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
     [SerializeField] Transform startPosition;
     [SerializeField] GameObject arrow;
     [SerializeField] int lineResolution = 30;
-    [SerializeField] float maxHeightRange = 2f;
+    [SerializeField, Range(0.1f, 20f)] float maxHeightRange = 2f;
     [SerializeField] TMPro.TMP_Text dataToText;
 
     LineRenderer lineRenderer;
@@ -101,16 +101,14 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
             if(drawPoint.y > debugHighestPoint)
                 debugHighestPoint = drawPoint.y;
         }
-
-        Debug.Log("Highest reached point on arc : " + debugHighestPoint);
     }
 
     void PrintData(LaunchData data)
     {
-        dataToText.text = $"Force: {data.initialVelocity.magnitude.ToString("F2")} " +
-            $"\nVertical Displacement: {Mathf.Abs(startPosition.position.y - data.targetPosition.y).ToString("F2")} " +
-            $"\nHorizontal Displacement: {data.horizontalDistance.ToString("F2")} " +
-            $"\nTime To Target: {data.timeToTarget.ToString("F2")}";
+        dataToText.text = $"{data.initialVelocity.magnitude.ToString("F2")}" +
+            $"\n{(data.targetPosition.y - startPosition.position.y).ToString("F2")}" +
+            $"\n{data.horizontalDistance.ToString("F2")}" +
+            $"\n{data.timeToTarget.ToString("F2")}";
     }
 
 }
