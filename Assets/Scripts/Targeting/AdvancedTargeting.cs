@@ -11,7 +11,7 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
 
     [Tooltip("Resolution/Detail-level of the line-renderer component")]
     public int lineResolution = 30;
-    public float maxHeightRange = 5f;
+    public float maxHeightRange = 1f;
     public TMPro.TMP_Text dataToText;
 
     private void Start()
@@ -53,7 +53,7 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         float distanceY = targetPosition.y - startPosition.position.y;
 
         //Randomize Height, larger values yield higher arc, must never be below 0
-        float height = Mathf.Abs(distanceY + Random.Range(0.5f, maxHeightRange));
+        float height = RandomizeHeight(distanceY); //(targetPosition.y);
 
         //Horizontal distance, points toward the target
         Vector3 horizontalDirection = startPosition.position.DirectionTo(targetPosition).With(y: 0f);
@@ -71,6 +71,18 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         data.timeToTarget = time;
         data.targetPosition = targetPosition;
         return data;
+    }
+
+
+    float RandomizeHeight(float relativeHeight)
+    {
+        //Height must never be <0 , but it also has to be relative to the position of the bow and target
+        //while allowing some randomization and customization
+        float minValue = (relativeHeight > 0) ? relativeHeight + 0.1f : 0.1f;
+        float maxValue = (relativeHeight > 0) ? relativeHeight + maxHeightRange : minValue + maxHeightRange;
+        float randomizedHeight = Random.Range(minValue, maxValue);
+        Debug.Log(randomizedHeight);
+        return randomizedHeight;
     }
 
     void DrawPath(LaunchData launchData)
