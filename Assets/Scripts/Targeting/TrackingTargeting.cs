@@ -16,11 +16,11 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
     public LaunchData Calculate(TargetData data)
     {
         RotateArcher(data.targetPosition);
-        LaunchArrow(data);
-
-        //This data is not used, but required. This class is too simple to have any use for it
-        LaunchData fauxData = new LaunchData();
-        return fauxData;
+        LaunchData newData = CalculateFlight(data);
+        ui.WriteToUi(newData);
+        ui.StraightLine(startPosition.position, newData.initialVelocity);
+        LaunchArrow(newData);
+        return newData;
     }
     public void Launch(LaunchData data)
     {
@@ -33,20 +33,37 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
-    void LaunchArrow(TargetData target)
+    LaunchData CalculateFlight(TargetData target)
+    {
+        LaunchData arrowData = new LaunchData();
+        Rigidbody targetRigidbody = target.targetObject.GetComponent<Rigidbody>();
+
+        Vector3 velocity = GetArrowVelocity(targetRigidbody, target);
+        if (targetRigidbody != null)
+            arrowData.timeToTarget = TimeToImpact(targetRigidbody);
+
+        return FillArrowData(arrowData, velocity, target);
+    }
+
+    Vector3 GetArrowVelocity(Rigidbody targetRigidbody, TargetData target)
+    {
+        Vector3 v = targetRigidbody!= null ? AnticipateVelocity(targetRigidbody).normalized : startPosition.position.DirectionTo(target.targetPosition).normalized;
+        return v;
+    }
+
+    LaunchData FillArrowData(LaunchData arrowData, Vector3 velocity, TargetData target)
+    {
+        arrowData.initialVelocity = velocity * power;
+        arrowData.initialPosition = startPosition.position;
+        arrowData.targetPosition = target.targetPosition;
+        arrowData.horizontalDistance = startPosition.position.DirectionTo(target.targetObject.position).With(y: 0f).magnitude;
+        return arrowData;
+    }
+
+    void LaunchArrow(LaunchData lData)
     {
         GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
-        Rigidbody targetRigidbody = target.targetObject.GetComponent<Rigidbody>();
-        Vector3 velocity;
-
-        if (targetRigidbody != null)
-            velocity = AnticipateVelocity(targetRigidbody);
-        else
-            velocity = startPosition.position.DirectionTo(target.targetPosition).normalized;
-
-        ui.StraightLine(startPosition.position, velocity, power);
-
-        newArrow.GetComponent<Rigidbody>().velocity = velocity * power;
+        newArrow.GetComponent<Rigidbody>().velocity = lData.initialVelocity;
     }
 
     float TimeToImpact(Rigidbody target)
@@ -65,8 +82,6 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
         float timeToHit = TimeToImpact(target);
         Vector3 expectedPosition = target.position + target.velocity * timeToHit;
         Vector3 dir = expectedPosition - startPosition.position;
-
-        Debug.Log("Time until hitting target: " + timeToHit);
         return dir.normalized;
     }
 

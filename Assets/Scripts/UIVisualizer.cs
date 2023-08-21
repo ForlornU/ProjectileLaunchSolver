@@ -36,14 +36,9 @@ $"\n{data.timeToTarget.ToString("F2")}";
         }
     }
 
-    public void StraightLine(Vector3 point1, Vector3 point2)
-    {
-        lineRenderer.SetPosition(0, point1);
-        lineRenderer.SetPosition(1, point2);
-    }
-    public void StraightLine(Vector3 start, Vector3 direction, float magnitude)
+    public void StraightLine(Vector3 start, Vector3 direction)
     {
         lineRenderer.SetPosition(0, start);
-        lineRenderer.SetPosition(1, start + direction * magnitude);
+        lineRenderer.SetPosition(1, start + direction);
     }
 }

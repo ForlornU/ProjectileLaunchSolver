@@ -37,8 +37,5 @@ public class SimpleTargeting : MonoBehaviour, ArcherInterface
         GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
         newArrow.GetComponent<Rigidbody>().velocity = dir.normalized * power;
     }
-
-
-
 }
 

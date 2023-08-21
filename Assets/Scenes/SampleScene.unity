@@ -10900,7 +10900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrow: {fileID: 8851561578297220846, guid: f06c6a493f3de714c8c391692d709988, type: 3}
   startPosition: {fileID: 1371681148}
-  power: 20
+  power: 26.1
 --- !u!1001 &250190590652631234
 PrefabInstance:
   m_ObjectHideFlags: 0

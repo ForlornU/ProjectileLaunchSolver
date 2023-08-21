@@ -17,11 +17,11 @@ public class PointTargeting : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButton(0) && targetingDelay == 0)
+        if (Input.GetMouseButton(0) && targetingDelay == 0)
         {
             Predict();
         }
-        else if(Input.GetMouseButtonDown(1))
+        else if (Input.GetMouseButtonDown(1))
             ShootArrow();
 
         Cooldown();
