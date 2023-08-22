@@ -6,8 +6,11 @@ public class PointTargeting : MonoBehaviour
     LaunchData storedLaunchData;
 
     [SerializeField] Transform target;
-    float targetingDelay = 0.15f;
+    [SerializeField, Range(4f, 10f)] float minDistance = 5f;
+    [SerializeField, Range(50f, 1000f)] float maxDistance = 200f;
     [SerializeField, Range(0.06f, 2f)] float maxDelay = 0.15f;
+
+    float targetingDelay = 0.15f;
 
     private void Start()
     {
@@ -22,7 +25,7 @@ public class PointTargeting : MonoBehaviour
             Predict();
         }
         else if (Input.GetMouseButtonDown(1))
-            ShootArrow();
+            Archer.Launch(storedLaunchData);
 
         Cooldown();
     }
@@ -35,30 +38,25 @@ public class PointTargeting : MonoBehaviour
     void Predict()
     {
         targetingDelay = maxDelay;
+        LaunchData newData;
 
-        LaunchData newData = Archer.Calculate(UpdateTarget());
-        if (newData.horizontalDistance < 5f)
+        if (UpdateTarget(out TargetData td))
         {
-            Debug.Log("Too close!");
-            return;
+            newData = Archer.Calculate(td);
+            storedLaunchData = newData;
         }
-        storedLaunchData = newData;
     }
 
-    void ShootArrow()
-    {
-        if (storedLaunchData.timeToTarget < 0.1f) //Trying to check if null
-            return;
-        Archer.Launch(storedLaunchData);
-    }
-
-    TargetData UpdateTarget()
+    bool UpdateTarget(out TargetData td)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000))
-            target.transform.position = hit.point;
+        bool validTarget = Physics.Raycast(ray, out RaycastHit hit, maxDistance);
+        if (Vector3.Distance(hit.point, transform.position) < minDistance)
+            validTarget = false;
 
-        return new TargetData(hit.point, hit.transform, 0f);
+        td = new TargetData(hit.point, hit.transform);
+        return validTarget;
     }
+    
 }
