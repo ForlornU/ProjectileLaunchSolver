@@ -42,6 +42,7 @@ public class PointTargeting : MonoBehaviour
 
         if (UpdateTarget(out TargetData td))
         {
+            target.position = td.targetPosition;
             newData = Archer.Calculate(td);
             storedLaunchData = newData;
         }

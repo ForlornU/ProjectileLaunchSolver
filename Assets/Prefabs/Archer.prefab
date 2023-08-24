@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 311246489955597676}
   - component: {fileID: 7815812612921630757}
   - component: {fileID: 1033191201179677048}
-  - component: {fileID: 8701995878402174188}
   m_Layer: 0
   m_Name: Archer
   m_TagString: Untagged
@@ -155,8 +154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 509126534b81fbe4183ab270cc33709f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Archer: {fileID: 0}
   target: {fileID: 0}
+  minDistance: 5
+  maxDistance: 200
+  maxDelay: 0.15
 --- !u!120 &1033191201179677048
 LineRenderer:
   serializedVersion: 2
@@ -261,22 +262,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &8701995878402174188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4985415035043401153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88e0b4927937c5e4bbc26462f7f775ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startPosition: {fileID: 2842761987512708916}
-  arrow: {fileID: 3687967516317038885, guid: 167bf3354ae64c7499d58b423299b3f6, type: 3}
-  gravity: -9.81
-  lineResolution: 30
 --- !u!1001 &6546840314970159760
 PrefabInstance:
   m_ObjectHideFlags: 0

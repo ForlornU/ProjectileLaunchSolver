@@ -32,7 +32,7 @@ public class SimpleTargeting : MonoBehaviour, ArcherInterface
 
     void LaunchArrow(Vector3 target)
     {
-        Vector3 dir = target - startPosition.position;
+        Vector3 dir = startPosition.position.DirectionTo(target);
 
         GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
         newArrow.GetComponent<Rigidbody>().velocity = dir.normalized * power;

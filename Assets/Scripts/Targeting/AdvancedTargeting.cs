@@ -81,9 +81,6 @@ public class AdvancedTargeting : MonoBehaviour, ArcherInterface
         float maxValue = (relativeHeight > 0) ? relativeHeight + maxHeightRange : minValue + maxHeightRange;
 
         float randomizedHeight = random ? Random.Range(minValue, maxValue) : Mathf.Lerp(minValue, maxValue, 0.5f);
-        //randomizedHeight = Mathf.Lerp(minValue, maxValue, 0.5f);
-
-        Debug.Log(randomizedHeight);
         return randomizedHeight;
     }
 }
