@@ -20,14 +20,22 @@ public class PointTargeting : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0) && targetingDelay == 0)
+        if (targetingDelay != 0)
+        {
+            Cooldown();
+            return;
+        }
+
+        if (Input.GetMouseButton(0))
         {
             Predict();
+            targetingDelay = maxDelay;
         }
         else if (Input.GetMouseButtonDown(1))
+        {
             Archer.Launch(storedLaunchData);
-
-        Cooldown();
+            targetingDelay = maxDelay;
+        }
     }
 
     void Cooldown()
@@ -37,7 +45,6 @@ public class PointTargeting : MonoBehaviour
 
     void Predict()
     {
-        targetingDelay = maxDelay;
         LaunchData newData;
 
         if (UpdateTarget(out TargetData td))

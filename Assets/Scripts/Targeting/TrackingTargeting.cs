@@ -24,7 +24,7 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
     }
     public void Launch(LaunchData data)
     {
-        Debug.Log("Left click to fire a predicting arrow at a moving target");
+        Debug.Log("Left click to fire a predicting arrow at a moving target, targets move too fast, there barely time to first aim and then fire");
     }
 
     void RotateArcher(Vector3 target)

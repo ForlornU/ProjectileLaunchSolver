@@ -2,26 +2,31 @@ using UnityEngine;
 
 public class SimpleTargeting : MonoBehaviour, ArcherInterface
 {
-    [SerializeField]
-    GameObject arrow;
-    [SerializeField]
-    Transform startPosition;
-    [SerializeField]
-    float power = 15f;
+    [SerializeField] GameObject arrow;
+    [SerializeField] Transform startPosition;
+    [SerializeField] float power = 15f;
+
+    UIVisualizer ui;
+
+    private void Start()
+    {
+        ui = GetComponent<UIVisualizer>();
+    }
 
     public LaunchData Calculate(TargetData targetData)
     {
         RotateArcher(targetData.targetPosition);
-        LaunchArrow(targetData.targetPosition);
 
-        //This data is not used, but required. This class is too simple to have any use for it
         LaunchData fauxData = new LaunchData();
+        fauxData.initialVelocity = startPosition.position.DirectionToNormalized(targetData.targetPosition) * power;
+        fauxData.initialPosition = startPosition.position;
+        ui.StraightLine(fauxData.initialPosition, fauxData.initialVelocity);
         return fauxData;
     }
 
     public void Launch(LaunchData data)
     {
-        Debug.Log("Left click to fire a simple arrow");
+        LaunchArrow(data.initialVelocity);
     }
 
     void RotateArcher(Vector3 target)
@@ -30,12 +35,10 @@ public class SimpleTargeting : MonoBehaviour, ArcherInterface
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
-    void LaunchArrow(Vector3 target)
+    void LaunchArrow(Vector3 velocity)
     {
-        Vector3 dir = startPosition.position.DirectionTo(target);
-
         GameObject newArrow = Instantiate(arrow, startPosition.position, transform.rotation);
-        newArrow.GetComponent<Rigidbody>().velocity = dir.normalized * power;
+        newArrow.GetComponent<Rigidbody>().velocity = velocity.normalized * power;
     }
 }
 
