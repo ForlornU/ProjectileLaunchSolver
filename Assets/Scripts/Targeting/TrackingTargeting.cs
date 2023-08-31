@@ -70,7 +70,7 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
         arrowData.initialVelocity = velocity * power;
         arrowData.initialPosition = startPosition.position;
         arrowData.targetPosition = target.targetPosition;
-        arrowData.horizontalDistance = startPosition.position.DirectionTo(target.targetObject.position).With(y: 0f).magnitude;
+        arrowData.horizontalDistance = Vector3.Distance(arrowData.initialPosition, target.targetPosition.With(y:arrowData.initialPosition.y));
         return arrowData;
     }
 
