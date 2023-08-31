@@ -10886,7 +10886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineResolution: 30
   dataToText: {fileID: 1756036682}
---- !u!114 &2140635870
+--- !u!114 &2140635891
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10895,12 +10895,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2140635861}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 028857450d6bae9489171fa12947f710, type: 3}
+  m_Script: {fileID: 11500000, guid: a5ed770deb1640d449fc9940b01682a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   arrow: {fileID: 8851561578297220846, guid: f06c6a493f3de714c8c391692d709988, type: 3}
   startPosition: {fileID: 1371681148}
-  power: 15
+  power: 30
+  debugPause: 1
 --- !u!1001 &250190590652631234
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11214,7 +11215,7 @@ PrefabInstance:
     - target: {fileID: 7815812612921630757, guid: 7b28068cbba597946b7f2ae8b7ed9dd3,
         type: 3}
       propertyPath: maxDelay
-      value: 0.25
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7815812612921630757, guid: 7b28068cbba597946b7f2ae8b7ed9dd3,
         type: 3}
@@ -11262,7 +11263,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4985415035043401153, guid: 7b28068cbba597946b7f2ae8b7ed9dd3,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2140635870}
+      addedObject: {fileID: 2140635891}
   m_SourcePrefab: {fileID: 100100000, guid: 7b28068cbba597946b7f2ae8b7ed9dd3, type: 3}
 --- !u!1001 &8858684568384624931
 PrefabInstance:

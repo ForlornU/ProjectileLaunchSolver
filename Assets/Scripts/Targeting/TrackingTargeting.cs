@@ -5,6 +5,7 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
     [SerializeField] GameObject arrow;
     [SerializeField] Transform startPosition;
     [SerializeField] float power = 30f;
+    [SerializeField] bool debugPause = true;
 
     UIVisualizer ui;
 
@@ -17,11 +18,24 @@ public class TrackingTargeting : MonoBehaviour, ArcherInterface
     {
         RotateArcher(data.targetPosition);
         LaunchData newData = CalculateFlight(data);
+
         ui.WriteToUi(newData);
         ui.StraightLine(startPosition.position, newData.initialVelocity);
+        DebugPause(newData);
+
         LaunchArrow(newData);
         return newData;
     }
+
+    void DebugPause(LaunchData d)
+    {
+        if (!debugPause)
+            return;
+
+        Debug.DrawLine(startPosition.position, d.targetPosition, Color.red);
+        Debug.Break();
+    }
+
     public void Launch(LaunchData data)
     {
         Debug.Log("Left click to fire a predicting arrow at a moving target, targets move too fast, there barely time to first aim and then fire");
