@@ -3,12 +3,12 @@
 ![Screenshot](https://github.com/ForlornU/Images/blob/5733611600465fb97d9d2ad37690bb1352e48202/Thumbnail1.png)
 ![Screenshot](https://github.com/ForlornU/Images/blob/5733611600465fb97d9d2ad37690bb1352e48202/Thumbnail2.png)
 
-This Unity project is kind of an archery/projectile simulation that showcases different targeting methods game developers in the Unity3d engine. It offers three distinct targeting scripts
+This Unity project is kind of an archery/projectile simulation that showcases different targeting methods in the Unity3d engine. It offers three distinct targeting scripts
 
 ## Targeting Scripts
 ### 1. Simple Targeting
 
-The `Simple Targeting` script represents the most basic targeting approach. It allows you to fire a simple arrow directly toward the target. This script works for scenarios where the target remains stationary and no prediction is required or you just want a very basic targeting approach.
+The `Simple Targeting` script represents the most basic targeting approach. It allows you to fire a projectile directly toward the target. This script works for scenarios where the target remains stationary and no prediction is required or you just want a very basic targeting approach.
 - Very basic
 - Direct aiming at the target.
 - Suitable for stationary targets.
