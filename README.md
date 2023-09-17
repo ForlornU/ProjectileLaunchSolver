@@ -3,7 +3,8 @@
 ![Screenshot](https://github.com/ForlornU/Images/blob/5733611600465fb97d9d2ad37690bb1352e48202/Thumbnail1.png)
 ![Screenshot](https://github.com/ForlornU/Images/blob/5733611600465fb97d9d2ad37690bb1352e48202/Thumbnail2.png)
 
-This Unity project is kind of an archery/projectile simulation that showcases different targeting methods in the Unity3d engine. It offers three distinct targeting scripts
+This Unity project is kind of an archery/projectile simulation that showcases different targeting methods in the Unity3d engine. It offers three distinct targeting scripts.
+This Unity Archery Project is all about achieving precision and realism in projectile simulations. This does not simply predict the trajectory of a projectile that will be fired, instead it calculates the exact path that it will have to take in order to get to a point. You simply give it a point and the script will figure our the rest
 
 ## Targeting Scripts
 ### 1. Simple Targeting
